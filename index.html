@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Verdant — grow a living garden</title>
+<meta name="description" content="Verdant is a cosy watercolour garden game and plant-care companion. Plant 30 real species, watch them grow in real time through seasons, weather and day/night, and keep a care calendar.">
+<meta property="og:title" content="Verdant — grow a living garden">
+<meta property="og:description" content="A cosy botanical game + plant-care companion. 30 real species, real-time growth, care calendar, encyclopedia and a 'which plant suits my room?' quiz.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kumarnikhildeveloperaccount.github.io/verdant/">
+<meta name="theme-color" content="#6f9a6a">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/garden.css">
+<link rel="stylesheet" href="css/views.css">
+</head>
+<body data-theme="morning">
+<a class="skip" href="#main">Skip to the garden</a>
+
+<!-- shared watercolour SVG filters (used by CSS decorations) -->
+<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="wc-edge"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="6"/></filter>
+</svg>
+
+<header id="topbar" class="topbar">
+  <a class="brand" href="#garden" aria-label="Verdant home">
+    <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58C30 40 18 34 10 30c10-2 20 2 22 12 1-14 8-26 24-30-6 10-10 24-12 34" fill="#7fae74" opacity=".85"/><path d="M32 58c0-14 2-26 10-38" stroke="#3f6b45" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
+    <span class="brand-word">Verdant</span>
+  </a>
+  <nav id="mainnav" class="mainnav" aria-label="Main">
+    <button class="navbtn" data-view="garden" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-8M12 13c0-4 3-7 7-7 0 4-3 7-7 7zM12 15c0-3-2-5-6-5 0 3 2 5 6 5z"/></svg><span>Garden</span></button>
+    <button class="navbtn" data-view="calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Care</span></button>
+    <button class="navbtn" data-view="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h5v16H5zM10 4h4v16h-4zM15 5l4 1-3 14-4-1z"/></svg><span>Plants</span></button>
+    <button class="navbtn" data-view="quiz"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9a3 3 0 1 1 4 2.8c-.7.3-1 1-1 1.7V15M12 18.5v.5"/><circle cx="12" cy="12" r="9"/></svg><span>Quiz</span></button>
+    <button class="navbtn" data-view="packet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6zM6 8h12M10 13c1 2 3 2 4 0"/></svg><span>Seeds</span></button>
+    <button class="navbtn" data-view="about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/></svg><span>About</span></button>
+  </nav>
+  <div class="top-actions">
+    <button id="ladybird" class="ladybird" aria-label="A ladybird. It seems to want attention." title="A ladybird">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="9" r="4" fill="#2b2b2b"/><ellipse cx="16" cy="18" rx="9" ry="9.5" fill="#d0453a"/><path d="M16 9v18.5" stroke="#2b2b2b" stroke-width="1.4"/><circle cx="11.5" cy="15" r="1.8" fill="#2b2b2b"/><circle cx="20.5" cy="15" r="1.8" fill="#2b2b2b"/><circle cx="12" cy="21.5" r="1.6" fill="#2b2b2b"/><circle cx="20" cy="21.5" r="1.6" fill="#2b2b2b"/></svg>
+    </button>
+    <button id="soundBtn" class="iconbtn" aria-pressed="false" aria-label="Sound off. Turn sound on" title="Sound"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="wave" d="M16 9c1.5 1.5 1.5 4.5 0 6M18.5 6.5c3 3 3 8 0 11"/><path class="mute" d="M16 9l5 6M21 9l-5 6"/></svg></button>
+    <button id="themeBtn" class="iconbtn" aria-label="Change paper theme" title="Paper theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c0-1.2-1-1.6-2-1.4-1.6.4-3-.8-2.6-2.4.3-1.2-.4-2.2-1.6-2.2-1.8 0-2.8-1.6-2.2-3H12z"/><circle cx="8" cy="11" r="1.3"/><circle cx="11" cy="7.5" r="1.3"/><circle cx="8.5" cy="15.5" r="1.3"/></svg></button>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ===================== GARDEN ===================== -->
+  <section id="view-garden" class="view" aria-labelledby="gardenTitle">
+    <div id="sky" class="sky-window" aria-label="Sky over your garden">
+      <canvas id="skyCanvas" aria-hidden="true"></canvas>
+      <div class="sky-info" id="skyInfo">
+        <span class="chip" id="seasonLabel">Spring</span>
+        <span class="chip" id="weatherLabel" title="Simulated garden weather">Sunny</span>
+        <span class="chip" id="clockLabel">--:--</span>
+        <span class="chip" id="moonLabel" title="Moon phase">Moon</span>
+      </div>
+      <div class="sky-title">
+        <h1 id="gardenTitle">Your living garden</h1>
+        <p id="gardenGreeting" class="hand">Good morning, gardener. The soil is listening.</p>
+      </div>
+    </div>
+
+    <div id="toolbar" class="toolbar" role="toolbar" aria-label="Garden tools">
+      <button class="tool" data-tool="hand" aria-pressed="true" title="Inspect (H)"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M11 17V8a2 2 0 0 1 4 0v7-9a2 2 0 0 1 4 0v9-7a2 2 0 0 1 4 0v10c0 6-3 9-8 9-4 0-6-2-8-6l-3-5a2 2 0 0 1 3-2z"/></svg><span>Inspect</span></button>
+      <button class="tool" data-tool="water" aria-pressed="false" title="Watering can (W) — press and hold over a plant"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 13h13v11a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3z"/><path d="M20 16l8-6M10 13c0-4 2-6 4-6s4 2 4 6"/><path d="M28 10l1-1" stroke-width="3"/></svg><span>Water</span></button>
+      <button class="tool" data-tool="prune" aria-pressed="false" title="Pruning shears (P) — tap yellow leaves"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="9" cy="23" r="4"/><circle cx="20" cy="25" r="4"/><path d="M12 20L26 5M17 22L23 9"/></svg><span>Prune</span></button>
+      <button class="tool" data-tool="mist" aria-pressed="false" title="Mister (M) — for humidity lovers"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 12h8v14a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z"/><path d="M13 12V8h6l2-3M21 8h3M26 6l2-1M26 9h3M26 12l2 1"/></svg><span>Mist</span></button>
+      <button class="tool" data-tool="feed" aria-pressed="false" title="Plant food (F) — growing season only"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 10h14l-2 18H11z"/><path d="M12 10c0-3 2-5 4-5s4 2 4 5M13 18c2 2 4 2 6 0"/></svg><span>Feed</span></button>
+      <span class="tool-sep" aria-hidden="true"></span>
+      <button id="napBtn" class="tool nap" title="Take a nap — skip ahead 6 hours"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M22 6a10 10 0 1 0 6 15A9 9 0 0 1 22 6z"/><path d="M8 6h4l-4 4h4"/></svg><span>Nap 6h</span></button>
+    </div>
+    <p id="toolHint" class="tool-hint hand" aria-live="polite">Tap a plant to inspect it, or tap an empty pot to plant something.</p>
+
+    <div id="zones" class="zones" aria-label="Garden areas"></div>
+
+    <aside id="plantPanel" class="plant-panel" aria-label="Plant details" hidden>
+      <button id="panelClose" class="iconbtn panel-close" aria-label="Close plant details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <div id="panelBody"></div>
+    </aside>
+  </section>
+
+  <!-- ===================== CARE CALENDAR ===================== -->
+  <section id="view-calendar" class="view" aria-labelledby="calHeading" hidden>
+    <div class="page-head">
+      <h2 id="calHeading">Care calendar</h2>
+      <p class="hand">Predicted from each plant's last drink. Plants don't read calendars, so check the soil too.</p>
+    </div>
+    <div class="cal-layout">
+      <div class="paper-card cal-card">
+        <div class="cal-nav">
+          <button id="calPrev" class="iconbtn" aria-label="Previous month"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <h3 id="calTitle">Month</h3>
+          <button id="calNext" class="iconbtn" aria-label="Next month"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+        <div class="cal-dow" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+        <div id="calGrid" class="cal-grid" role="group" aria-label="Care calendar days"></div>
+        <div id="calLegend" class="cal-legend"></div>
+      </div>
+      <div class="paper-card remind-card">
+        <h3>Reminders</h3>
+        <div id="remindList" class="remind-list"></div>
+        <div class="remind-actions">
+          <button id="notifyBtn" class="btn">Enable reminders</button>
+          <button id="icsBtn" class="btn ghost">Export to calendar (.ics)</button>
+        </div>
+        <p class="fine">Reminders use your browser's Notification API and only fire while Verdant is open in a tab. The .ics file works with any calendar app — no accounts involved.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ENCYCLOPEDIA ===================== -->
+  <section id="view-library" class="view" aria-labelledby="libHeading" hidden>
+    <div class="page-head">
+      <h2 id="libHeading">The plant encyclopedia</h2>
+      <p class="hand">Thirty real species, painted from memory and fact-checked with a magnifying glass.</p>
+    </div>
+    <div class="lib-filters paper-card">
+      <label class="field grow"><span>Search</span><input id="libSearch" type="search" placeholder="fern, Ficus, pet-safe…" autocomplete="off"></label>
+      <label class="field"><span>Light</span>
+        <select id="libLight">
+          <option value="any">Any light</option>
+          <option value="0">Low light</option>
+          <option value="1">Medium, indirect</option>
+          <option value="2">Bright, indirect</option>
+          <option value="3">Direct sun</option>
+        </select>
+      </label>
+      <button id="libPets" class="chipbtn" aria-pressed="false">Pet-safe only</button>
+      <button id="libEasy" class="chipbtn" aria-pressed="false">Easy-going only</button>
+      <span id="libCount" class="lib-count" aria-live="polite"></span>
+    </div>
+    <div id="libGrid" class="lib-grid"></div>
+    <p class="fine center">Pet-toxicity notes follow the ASPCA's lists where available. If a pet eats a plant and seems unwell, contact your vet.</p>
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section id="view-quiz" class="view" aria-labelledby="quizHeading" hidden>
+    <div class="page-head">
+      <h2 id="quizHeading">Which plant suits my room?</h2>
+      <p class="hand">Six questions. No wrong answers — only wrong windowsills.</p>
+    </div>
+    <div id="quizBox" class="quiz-box paper-card"></div>
+  </section>
+
+  <!-- ===================== SEED PACKET (SAVE) ===================== -->
+  <section id="view-packet" class="view" aria-labelledby="packetHeading" hidden>
+    <div class="page-head">
+      <h2 id="packetHeading">Seed packet &amp; saving</h2>
+      <p class="hand">Your garden lives in this browser. Fold it into a seed packet to carry it elsewhere.</p>
+    </div>
+    <div class="packet-layout">
+      <figure class="packet-figure">
+        <div id="packetCard" class="packet-card" aria-label="Seed packet preview"></div>
+        <figcaption class="fine">A seed packet is a small JSON file containing your whole garden.</figcaption>
+      </figure>
+      <div class="paper-card packet-actions">
+        <h3>Fold &amp; sow</h3>
+        <div class="btn-row">
+          <button id="exportBtn" class="btn">Export seed packet</button>
+          <label class="btn ghost file-btn" for="importFile">Import seed packet</label>
+          <input id="importFile" type="file" accept=".json,application/json" class="visually-hidden">
+        </div>
+        <label class="field"><span>Gardener's name (for the packet)</span><input id="gardenerName" type="text" maxlength="40" placeholder="e.g. Fern Gully"></label>
+        <label class="field"><span>Hemisphere (sets the seasons)</span>
+          <select id="hemiSelect"><option value="N">Northern</option><option value="S">Southern</option></select>
+        </label>
+        <h3>Save inspector</h3>
+        <dl id="saveInfo" class="save-info"></dl>
+        <div class="btn-row">
+          <button id="migrateDemoBtn" class="btn ghost">Sow a vintage v1 packet (migration demo)</button>
+          <button id="resetBtn" class="btn danger">Compost everything</button>
+        </div>
+        <p class="fine">Saved with a versioned schema (currently v<span id="schemaVer">3</span>). Older packets are upgraded step by step on import, and a backup of your previous save is kept before any upgrade.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="view-about" class="view" aria-labelledby="aboutHeading" hidden>
+    <div class="page-head">
+      <h2 id="aboutHeading">About Verdant</h2>
+      <p class="hand">A garden that grows while you sleep — and forgives you on Mondays.</p>
+    </div>
+    <div class="about-grid">
+      <div class="paper-card">
+        <h3>What is this?</h3>
+        <p>Verdant is a cosy botanical game and a gentle plant-care companion. Every pot holds a real species with real care needs. Plants grow in real time, follow the seasons of your hemisphere, react to (simulated) weather and the actual time of day, and keep growing while the tab is closed.</p>
+        <p>Everything runs in your browser. No accounts, no trackers, no servers — just paper, paint and a little bit of <code>localStorage</code>.</p>
+        <h3>How to play</h3>
+        <ul class="leafy">
+          <li>Tap an empty pot to plant. Match the plant's light needs to the spot.</li>
+          <li>Pick the watering can and <strong>press and hold</strong> over a plant. Stop before the saucer overflows.</li>
+          <li>Use the shears on yellowing leaves. Snip, snip.</li>
+          <li>Feed in spring and summer. Plants rest in winter (as should you).</li>
+          <li>Keyboard: <kbd>H</kbd> <kbd>W</kbd> <kbd>P</kbd> <kbd>M</kbd> <kbd>F</kbd> pick tools, <kbd>Enter</kbd> uses a tool on the focused pot.</li>
+        </ul>
+      </div>
+      <div class="paper-card made-by">
+        <h3>Made by</h3>
+        <p class="sig hand">Designed &amp; built by Kumar Nikhil</p>
+        <ul class="links">
+          <li><a href="https://kumarnikhildeveloperaccount.github.io/" target="_blank" rel="noopener">Portfolio</a></li>
+          <li><a href="https://www.linkedin.com/in/kumar-nikhil-1000a9192/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:nkashyapnikhilnk@gmail.com">Email</a></li>
+        </ul>
+        <p><a class="more" href="https://kumarnikhildeveloperaccount.github.io/" target="_blank" rel="noopener">More projects by Kumar Nikhil →</a></p>
+        <p class="gratitude">With gratitude to God — Om Namah Paarvati Pateh, Har Har Mahadev. May God bless you and everyone.</p>
+        <p class="fine">Care facts are general guidance for typical indoor conditions. All gardener names and sample data are fictional. No plants were overwatered in the making of this site. Okay, one.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer" class="footer">
+  <p>Designed &amp; built by Kumar Nikhil ·
+    <a href="https://kumarnikhildeveloperaccount.github.io/" target="_blank" rel="noopener">Portfolio</a> ·
+    <a href="https://www.linkedin.com/in/kumar-nikhil-1000a9192/" target="_blank" rel="noopener">LinkedIn</a> ·
+    <a href="mailto:nkashyapnikhilnk@gmail.com">Email</a> ·
+    <a href="https://kumarnikhildeveloperaccount.github.io/" target="_blank" rel="noopener">More projects by Kumar Nikhil →</a></p>
+  <p class="gratitude">With gratitude to God — Om Namah Paarvati Pateh, Har Har Mahadev. May God bless you and everyone.</p>
+  <p id="footerJoke" class="hand footer-joke">Plants: the only roommates who never eat your leftovers.</p>
+</footer>
+
+<canvas id="fxCanvas" class="fx-canvas" aria-hidden="true"></canvas>
+<div id="cursorTool" class="cursor-tool" aria-hidden="true"></div>
+
+<div id="modal" class="modal" hidden>
+  <div class="modal-backdrop" data-close="1"></div>
+  <div id="modalCard" class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button id="modalClose" class="iconbtn modal-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
+<noscript><p class="noscript">Verdant needs JavaScript to grow. Even cacti need a little water.</p></noscript>
+
+<script src="js/data.js" defer></script>
+<script src="js/store.js" defer></script>
+<script src="js/sim.js" defer></script>
+<script src="js/audio.js" defer></script>
+<script src="js/plantart.js" defer></script>
+<script src="js/habits.js" defer></script>
+<script src="js/scene.js" defer></script>
+<script src="js/garden.js" defer></script>
+<script src="js/calendar.js" defer></script>
+<script src="js/library.js" defer></script>
+<script src="js/quiz.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

@@ -163,3 +163,6 @@ body[data-theme="herbarium"] .lib-card { background: #f3e7cb; }
 .away-list li.bloom::before { content: "\273F"; color: #b8577a; }
 .away-list li.frost::before { content: "\2744"; color: #6f9fc0; }
 .away-list li.sad::before { content: "\2639"; color: var(--bad); }
+
+/* footer credit links: 44px touch targets on every device */
+footer a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 .3em; }
